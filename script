@@ -1,0 +1,192 @@
+-- Generated using RoadToGlory's Converter v1.1 (RoadToGlory#9879)
+
+-- Instances:
+
+local Converted = {
+	["_FlyGui"] = Instance.new("ScreenGui");
+	["_MainScript"] = Instance.new("Script");
+	["_Frame"] = Instance.new("Frame");
+	["_UICorner"] = Instance.new("UICorner");
+	["_X"] = Instance.new("TextButton");
+	["_fly"] = Instance.new("TextButton");
+	["_UICorner1"] = Instance.new("UICorner");
+	["_TextLabel"] = Instance.new("TextLabel");
+	["_TextLabel1"] = Instance.new("TextLabel");
+	["_X1"] = Instance.new("TextButton");
+}
+
+-- Properties:
+
+Converted["_FlyGui"].DisplayOrder = 9999
+Converted["_FlyGui"].ResetOnSpawn = false
+Converted["_FlyGui"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Converted["_FlyGui"].Name = "FlyGui"
+Converted["_FlyGui"].Parent = game:GetService("CoreGui")
+
+Converted["_MainScript"].Source = "local Camera = workspace.CurrentCamera
+local Tool = script.Parent
+local Active = false
+local Plr
+
+local Speed = 1.5
+
+Tool:GetPropertyChangedSignal("Parent"):Connect(function()
+	if Plr==nil or Tool.Parent~=Plr.PlayerGui then
+		Active = false
+	end
+end)
+
+Tool.Frame.fly.MouseButton1Click:Connect(function()
+	Active = not Active
+	if not Active then
+		Tool.Frame.fly.Text = "Flying: No"
+	else
+		Tool.Frame.fly.Text = "Flying: Yes"
+		Fly()
+	end
+end)
+
+Tool.Frame.X.MouseButton1Click:Connect(function()
+	Tool.Frame.Visible = false
+	Tool.X.Visible = true
+end)
+
+Tool.X.MouseButton1Click:Connect(function()
+	Tool.Frame.Visible = true
+	Tool.X.Visible = false
+end)
+
+function Fly()
+	wait()
+	Plr = game.Players.LocalPlayer
+	local Char = Plr.Character
+	local Human = Char:FindFirstChildOfClass("Humanoid")
+	local Torso = Char:FindFirstChild("HumanoidRootPart")
+	
+	local Force = Instance.new("BodyVelocity")
+	local Spin = Instance.new("BodyGyro")
+	Spin.P = 10000
+	Spin.MaxTorque = Vector3.new(Spin.P,Spin.P,Spin.P)*100
+	Spin.CFrame = Torso.CFrame
+
+	Force.Velocity = Vector3.new(0,0,0)
+	Force.P = 1000
+	Force.MaxForce = Vector3.new(Force.P,Force.P,Force.P)*100
+
+	Force.Parent = Torso
+	Spin.Parent = Torso
+
+	Human.PlatformStand = true
+	Human.AutoRotate = false
+	Human:ChangeState(Enum.HumanoidStateType.Freefall)
+	
+	while Active do
+		wait()
+		local Push = Vector3.new(0, 0, 0)
+		local FV = Camera.CFrame:VectorToWorldSpace(Vector3.new(0, 0, -1))
+		local SV = Camera.CFrame:VectorToWorldSpace(Vector3.new(-1, 0, 0))
+
+		local CoFrame = Camera.CFrame
+		local CV = CFrame.new(Vector3.new(0,0,0),CoFrame.LookVector*Vector3.new(1,0,1)):VectorToObjectSpace(Human.MoveDirection)
+
+		Push = Push + ((FV * (60*Speed) * -CV.z) or Push)
+		Push = Push + ((SV * (40*Speed) * -CV.x) or Push)
+
+		Spin.CFrame = CFrame.new(Vector3.new(0, 0, 0), FV)
+
+		Force.Velocity = Force.Velocity:Lerp(Push, 0.2)
+		
+		if not Human.PlatformStand then
+			Human.PlatformStand = true
+		end
+		
+		if Human.AutoRotate then
+			Human.AutoRotate = false
+		end
+	end
+
+	Spin:Destroy()
+	Force:Destroy()
+
+	Human.PlatformStand = false
+	Human.AutoRotate = true
+end"
+Converted["_MainScript"].Name = "MainScript"
+Converted["_MainScript"].Parent = Converted["_FlyGui"]
+
+Converted["_Frame"].Active = true
+Converted["_Frame"].AnchorPoint = Vector2.new(1, 1)
+Converted["_Frame"].BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_Frame"].BackgroundTransparency = 0.20000000298023224
+Converted["_Frame"].BorderColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_Frame"].Position = UDim2.new(1.00482094, -7, 0.996323526, 3)
+Converted["_Frame"].Size = UDim2.new(0, 200, 0, 119)
+Converted["_Frame"].Visible = false
+Converted["_Frame"].Parent = Converted["_FlyGui"]
+
+Converted["_UICorner"].Parent = Converted["_Frame"]
+
+Converted["_X"].Font = Enum.Font.SourceSans
+Converted["_X"].Text = "X"
+Converted["_X"].TextColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_X"].TextSize = 20
+Converted["_X"].AnchorPoint = Vector2.new(1, 0)
+Converted["_X"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_X"].BackgroundTransparency = 1
+Converted["_X"].BorderColor3 = Color3.fromRGB(27.000002190470695, 42.000001296401024, 53.000004440546036)
+Converted["_X"].Position = UDim2.new(1, 0, 0, 0)
+Converted["_X"].Size = UDim2.new(0, 30, 0, 30)
+Converted["_X"].Name = "X"
+Converted["_X"].Parent = Converted["_Frame"]
+
+Converted["_fly"].Font = Enum.Font.SourceSans
+Converted["_fly"].Text = "Flying: No"
+Converted["_fly"].TextColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_fly"].TextSize = 14
+Converted["_fly"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_fly"].BorderColor3 = Color3.fromRGB(27.000002190470695, 42.000001296401024, 53.000004440546036)
+Converted["_fly"].Position = UDim2.new(0.0700000003, 0, 0.5, 0)
+Converted["_fly"].Size = UDim2.new(0, 175, 0, 25)
+Converted["_fly"].Name = "fly"
+Converted["_fly"].Parent = Converted["_Frame"]
+
+Converted["_UICorner1"].Parent = Converted["_fly"]
+
+Converted["_TextLabel"].Font = Enum.Font.SourceSans
+Converted["_TextLabel"].Text = "Made By N2K"
+Converted["_TextLabel"].TextColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_TextLabel"].TextSize = 14
+Converted["_TextLabel"].BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_TextLabel"].BackgroundTransparency = 1
+Converted["_TextLabel"].BorderColor3 = Color3.fromRGB(27.000002190470695, 42.000001296401024, 53.000004440546036)
+Converted["_TextLabel"].BorderSizePixel = 0
+Converted["_TextLabel"].Position = UDim2.new(0.230000004, 0, 0.731092453, 0)
+Converted["_TextLabel"].Size = UDim2.new(0, 110, 0, 32)
+Converted["_TextLabel"].Parent = Converted["_Frame"]
+
+Converted["_TextLabel1"].Font = Enum.Font.SourceSansBold
+Converted["_TextLabel1"].LineHeight = 3
+Converted["_TextLabel1"].Text = "N2K's Fly Script V1"
+Converted["_TextLabel1"].TextColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_TextLabel1"].TextSize = 14
+Converted["_TextLabel1"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_TextLabel1"].BackgroundTransparency = 1
+Converted["_TextLabel1"].BorderColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_TextLabel1"].BorderSizePixel = 0
+Converted["_TextLabel1"].Position = UDim2.new(0.0900000036, 0, 0.0252100844, 0)
+Converted["_TextLabel1"].Size = UDim2.new(0, 163, 0, 48)
+Converted["_TextLabel1"].Parent = Converted["_Frame"]
+
+Converted["_X1"].Font = Enum.Font.SourceSans
+Converted["_X1"].Text = "Show Fly"
+Converted["_X1"].TextColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_X1"].TextSize = 20
+Converted["_X1"].TextStrokeTransparency = 0.75
+Converted["_X1"].AnchorPoint = Vector2.new(1, 1)
+Converted["_X1"].BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_X1"].BackgroundTransparency = 0.6000000238418579
+Converted["_X1"].BorderColor3 = Color3.fromRGB(27.000002190470695, 42.000001296401024, 53.000004440546036)
+Converted["_X1"].Position = UDim2.new(1, 0, 1, 0)
+Converted["_X1"].Size = UDim2.new(0, 65, 0, 30)
+Converted["_X1"].Name = "X"
+Converted["_X1"].Parent = Converted["_FlyGui"]
